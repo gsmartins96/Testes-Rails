@@ -22,7 +22,7 @@ RSpec.describe "Users", type: :request do
     context "when it has valid params" do
       it "creates the user with correct attributes" do
         # não cria dados no banco de dados, usa os dados do FactoryBot
-        user_attributes = FactoryBot.attribute_for(:user)
+        user_attributes = FactoryBot.attributes_for(:user)
         # obtem as rotas com metodo post, e passa como parametro o user_attibutes criado
         post users_path, params: { user: user_attributes }
         # garante que o ultimo usuario existe e tem os atributos necessarios
@@ -31,7 +31,13 @@ RSpec.describe "Users", type: :request do
     end
 
     context "when it hasnt valid params" do
-      it "does not create user"
+      it "does not create user" do
+        # Expect diferente. Faz um post com params todos vazios, e depois verifica, se o contador de usuarios :count não tenha mudado
+        # Ou seja, nenhum User foi criado 
+        expect{
+          post users_path, params: { user: {kind: '', name: '', level: ''}}
+        }.to_not change(User, :count)
+      end
     end
   end
 end
