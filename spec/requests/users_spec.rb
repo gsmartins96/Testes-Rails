@@ -20,7 +20,14 @@ RSpec.describe "Users", type: :request do
 
   describe "POST /users" do
     context "when it has valid params" do
-      it "creates the user with correct attributes"
+      it "creates the user with correct attributes" do
+        # não cria dados no banco de dados, usa os dados do FactoryBot
+        user_attributes = FactoryBot.attribute_for(:user)
+        # obtem as rotas com metodo post, e passa como parametro o user_attibutes criado
+        post users_path, params: { user: user_attributes }
+        # garante que o ultimo usuario existe e tem os atributos necessarios
+        expect(User.last).to have_attributes(user_attributes)
+      end
     end
 
     context "when it hasnt valid params" do
